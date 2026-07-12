@@ -20,6 +20,7 @@
 
 RouteMind is a Smart Transport Operations Platform built using the **MERN Stack** to simplify logistics and fleet management. It enables organizations to manage vehicles, drivers, trips, maintenance, fuel expenses, and monitor vehicles in real time through an intuitive dashboard.
 
+
 ---
 
 ## ✨ Features
@@ -34,6 +35,12 @@ RouteMind is a Smart Transport Operations Platform built using the **MERN Stack*
 - ⛽ Fuel & Expense Tracking
 - 📈 Reports & Analytics
 - 📄 CSV Export
+
+---
+
+## 🌐 Live Demo
+
+🚀 **Application:** [link](https://route-mind.onrender.com/)
 
 ---
 
