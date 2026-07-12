@@ -53,7 +53,7 @@ RouteMind is a Smart Transport Operations Platform built using the **MERN Stack*
 
 ### Driver Management
 
-![Driver Management](assets/drivers.png)
+![Driver Management](assets/drive.png)
 
 ---
 
