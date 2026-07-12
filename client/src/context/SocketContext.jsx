@@ -12,7 +12,7 @@ export function SocketProvider({ children }) {
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
-    const socket = io("/", {
+    const socket = io(import.meta.env.VITE_SOCKET_URL || "/", {
       auth: { token },
       transports: ["websocket", "polling"],
       reconnection: true,

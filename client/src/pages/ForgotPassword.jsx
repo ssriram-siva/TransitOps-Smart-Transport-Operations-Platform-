@@ -25,7 +25,7 @@ function ForgotPassword() {
     setError("");
     setLoading(true);
     try {
-      await axios.post("/api/auth/forgot-password", { email });
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email });
       setSent(true);
       toast.success("Reset link sent to your email");
     } catch (err) {

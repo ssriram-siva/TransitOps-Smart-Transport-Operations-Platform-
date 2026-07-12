@@ -4,7 +4,7 @@ import axios from "axios";
 const AuthContext = createContext(null);
 
 const api = axios.create({
-  baseURL: "/api",
+  baseURL: import.meta.env.VITE_API_URL || "/api",
 });
 
 api.interceptors.request.use((config) => {
