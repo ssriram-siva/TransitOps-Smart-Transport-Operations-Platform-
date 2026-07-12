@@ -146,7 +146,7 @@ function Register() {
               <Truck className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">TransitOps</h1>
+              <h1 className="text-2xl font-bold text-white">RouteMind</h1>
               <p className="text-xs text-primary-300/60 tracking-widest uppercase">
                 Fleet Control
               </p>
