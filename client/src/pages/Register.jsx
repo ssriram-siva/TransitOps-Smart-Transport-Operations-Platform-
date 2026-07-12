@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Truck, Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
+import { Mail, Lock, User, Phone, Eye, EyeOff, ArrowRight, AlertCircle } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 
@@ -140,47 +140,18 @@ function Register() {
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-primary-600 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative z-10 flex flex-col justify-center px-16">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 bg-gradient-to-br from-primary-400 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/30">
-              <Truck className="w-7 h-7 text-white" />
-            </div>
-            <div>
-              <h1 className="text-2xl font-bold text-white">RouteMind</h1>
-              <p className="text-xs text-primary-300/60 tracking-widest uppercase">
-                Fleet Control
-              </p>
-            </div>
-          </div>
-
-          <h2 className="text-4xl font-bold text-white leading-tight mb-4">
+        <div className="relative z-10 flex flex-col justify-center items-center px-16 w-full">
+          <img src="/logo.svg" alt="RouteMind" className="w-20 h-20 mb-8 drop-shadow-2xl" />
+          <h2 className="text-4xl font-bold text-white leading-tight mb-4 text-center">
             Join the Platform
             <br />
             Built for Fleets
           </h2>
-          <p className="text-lg text-white/50 max-w-md leading-relaxed">
+          <p className="text-lg text-white/50 max-w-md leading-relaxed text-center mb-10">
             Create your account and start managing vehicles, drivers, and trips
             with powerful analytics.
           </p>
-
-          <div className="mt-12 space-y-4">
-            {[
-              "Real-time fleet tracking and management",
-              "Automated dispatch and trip lifecycle",
-              "Fuel and expense analytics",
-              "Role-based access control",
-            ].map((feature) => (
-              <div
-                key={feature}
-                className="flex items-center gap-3 bg-white/5 rounded-xl px-4 py-3 backdrop-blur-sm border border-white/10"
-              >
-                <div className="w-6 h-6 bg-secondary-500/20 rounded-full flex items-center justify-center">
-                  <div className="w-2 h-2 bg-secondary-400 rounded-full" />
-                </div>
-                <span className="text-sm text-white/70">{feature}</span>
-              </div>
-            ))}
-          </div>
+          <img src="/login-illustration.svg" alt="Fleet Management" className="w-full max-w-sm opacity-90" />
         </div>
       </div>
 
@@ -188,9 +159,7 @@ function Register() {
       <div className="flex-1 flex items-center justify-center p-8 bg-white overflow-y-auto">
         <div className="w-full max-w-md">
           <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <div className="w-10 h-10 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center">
-              <Truck className="w-6 h-6 text-white" />
-            </div>
+            <img src="/logo.svg" alt="RouteMind" className="w-10 h-10 rounded-xl" />
             <h1 className="text-xl font-bold text-dark-900">TransitOps</h1>
           </div>
 

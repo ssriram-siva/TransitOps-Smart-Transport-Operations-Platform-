@@ -8,6 +8,7 @@ import {
   Wrench,
   Fuel,
   BarChart3,
+  Radio,
   Menu,
   X,
   Bell,
@@ -25,6 +26,7 @@ const navItems = [
   { path: "/vehicles", label: "Vehicles", icon: Truck },
   { path: "/drivers", label: "Drivers", icon: Users },
   { path: "/trips", label: "Trips", icon: MapPin },
+  { path: "/tracking", label: "Live Tracking", icon: Radio },
   { path: "/maintenance", label: "Maintenance", icon: Wrench },
   { path: "/fuel", label: "Fuel & Expenses", icon: Fuel },
   { path: "/reports", label: "Reports", icon: BarChart3 },
@@ -98,9 +100,7 @@ function Layout() {
           >
             <div className="flex items-center">
               <div className="relative">
-                <div className="w-9 h-9 bg-gradient-to-br from-primary-400 to-primary-600 rounded-xl flex items-center justify-center shadow-lg shadow-primary-500/30">
-                  <Truck className="w-5 h-5 text-white" />
-                </div>
+                <img src="/logo.svg" alt="RouteMind" className="w-9 h-9 rounded-xl" />
                 <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-secondary-400 rounded-full border-2 border-dark-900 animate-pulse-slow" />
               </div>
               {sidebarOpen && (
@@ -292,7 +292,10 @@ function Layout() {
                       </p>
                     </div>
                     <div className="py-1">
-                      <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-dark-600 hover:bg-dark-50 transition-colors">
+                      <button
+                        onClick={() => { setUserMenuOpen(false); navigate("/settings"); }}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-dark-600 hover:bg-dark-50 transition-colors"
+                      >
                         <Settings className="w-4 h-4" />
                         Settings
                       </button>

@@ -4,6 +4,7 @@ const Trip = require("../models/Trip");
 const Vehicle = require("../models/Vehicle");
 const Driver = require("../models/Driver");
 const { protect, authorize } = require("../middleware/auth");
+const { getIO } = require("../utils/socket");
 
 const router = express.Router();
 
@@ -141,6 +142,10 @@ router.post(
 
       const trip = await Trip.create(req.body);
 
+      const io = getIO();
+      io.to("trips").emit("trip:created", { tripId: trip._id, status: trip.status });
+      io.to("dashboard").emit("dashboard:update");
+
       res.status(201).json({ success: true, trip });
     } catch (error) {
       next(error);
@@ -207,6 +212,17 @@ router.put(
         .populate("vehicle", "registrationNumber type make model")
         .populate("driver", "name phone licenseNumber");
 
+      const io = getIO();
+      io.to("trips").emit("trip:dispatched", {
+        tripId: trip._id,
+        vehicleId: vehicle._id,
+        registrationNumber: vehicle.registrationNumber,
+        driverName: driver.name,
+        origin: trip.origin,
+        destination: trip.destination,
+      });
+      io.to("dashboard").emit("dashboard:update");
+
       res.status(200).json({ success: true, trip: populated });
     } catch (error) {
       next(error);
@@ -255,6 +271,17 @@ router.put(
       const populated = await Trip.findById(trip._id)
         .populate("vehicle", "registrationNumber type make model")
         .populate("driver", "name phone licenseNumber");
+
+      const io = getIO();
+      io.to("trips").emit("trip:completed", {
+        tripId: trip._id,
+        vehicleId: vehicle?._id,
+        registrationNumber: vehicle?.registrationNumber,
+        driverName: driver?.name,
+        origin: trip.origin,
+        destination: trip.destination,
+      });
+      io.to("dashboard").emit("dashboard:update");
 
       res.status(200).json({ success: true, trip: populated });
     } catch (error) {
@@ -306,6 +333,10 @@ router.put(
       const populated = await Trip.findById(trip._id)
         .populate("vehicle", "registrationNumber type make model")
         .populate("driver", "name phone licenseNumber");
+
+      const io = getIO();
+      io.to("trips").emit("trip:cancelled", { tripId: trip._id, origin: trip.origin, destination: trip.destination });
+      io.to("dashboard").emit("dashboard:update");
 
       res.status(200).json({ success: true, trip: populated });
     } catch (error) {

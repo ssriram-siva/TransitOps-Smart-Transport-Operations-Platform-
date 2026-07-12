@@ -1,7 +1,14 @@
 const express = require("express");
+const crypto = require("crypto");
 const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 const { protect, authorize } = require("../middleware/auth");
+const {
+  sendEmail,
+  welcomeEmail,
+  loginNotificationEmail,
+  passwordResetEmail,
+} = require("../utils/email");
 
 const router = express.Router();
 
@@ -51,6 +58,11 @@ router.post(
       });
 
       const token = user.generateAuthToken();
+
+      // Send welcome email (non-blocking)
+      sendEmail(welcomeEmail(user.name, user.email)).catch((err) =>
+        console.error("Welcome email failed:", err.message)
+      );
 
       res.status(201).json({
         success: true,
@@ -110,6 +122,13 @@ router.post(
 
       const token = user.generateAuthToken();
 
+      // Send login notification email (non-blocking)
+      const ip = req.headers["x-forwarded-for"] || req.socket?.remoteAddress || "";
+      const userAgent = req.headers["user-agent"] || "";
+      sendEmail(loginNotificationEmail(user.name, user.email, ip, userAgent)).catch(
+        (err) => console.error("Login notification email failed:", err.message)
+      );
+
       res.status(200).json({
         success: true,
         token,
@@ -120,6 +139,90 @@ router.post(
           role: user.role,
           phone: user.phone,
         },
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+// POST /api/auth/forgot-password
+router.post(
+  "/forgot-password",
+  [body("email").isEmail().withMessage("Please provide a valid email")],
+  async (req, res, next) => {
+    try {
+      if (!validate(req, res)) return;
+
+      const user = await User.findOne({ email: req.body.email });
+      if (!user) {
+        return res.status(200).json({
+          success: true,
+          message: "If an account exists with that email, a reset link has been sent.",
+        });
+      }
+
+      const resetToken = user.getResetPasswordToken();
+      await user.save({ validateBeforeSave: false });
+
+      const resetUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/reset-password/${resetToken}`;
+
+      await sendEmail(passwordResetEmail(user.name, user.email, resetUrl));
+
+      res.status(200).json({
+        success: true,
+        message: "If an account exists with that email, a reset link has been sent.",
+      });
+    } catch (error) {
+      console.error("Forgot password error:", error.message);
+      res.status(500).json({
+        success: false,
+        message: "Email could not be sent. Please try again later.",
+      });
+    }
+  }
+);
+
+// PUT /api/auth/reset-password/:token
+router.put(
+  "/reset-password/:token",
+  [
+    body("password")
+      .isLength({ min: 6 })
+      .withMessage("Password must be at least 6 characters"),
+  ],
+  async (req, res, next) => {
+    try {
+      if (!validate(req, res)) return;
+
+      const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
+
+      const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+      });
+
+      if (!user) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid or expired reset token",
+        });
+      }
+
+      user.password = req.body.password;
+      user.resetPasswordToken = undefined;
+      user.resetPasswordExpire = undefined;
+      await user.save();
+
+      const token = user.generateAuthToken();
+
+      res.status(200).json({
+        success: true,
+        token,
+        message: "Password reset successful",
       });
     } catch (error) {
       next(error);

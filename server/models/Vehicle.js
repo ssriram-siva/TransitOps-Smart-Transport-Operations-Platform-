@@ -62,6 +62,22 @@ const vehicleSchema = new mongoose.Schema(
     fitnessExpiry: {
       type: Date,
     },
+    location: {
+      lat: { type: Number, default: 28.6139 },
+      lng: { type: Number, default: 77.2090 },
+      heading: { type: Number, default: 0 },
+      speed: { type: Number, default: 0 },
+      updatedAt: { type: Date, default: Date.now },
+    },
+    pathHistory: [
+      {
+        lat: Number,
+        lng: Number,
+        speed: Number,
+        heading: Number,
+        timestamp: { type: Date, default: Date.now },
+      },
+    ],
     notes: {
       type: String,
       maxlength: [500, "Notes cannot exceed 500 characters"],

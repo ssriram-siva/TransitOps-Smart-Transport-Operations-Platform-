@@ -39,7 +39,11 @@ export function AuthProvider({ children }) {
 
       if (storedToken && storedUser) {
         setToken(storedToken);
-        setUser(JSON.parse(storedUser));
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch {
+          localStorage.removeItem("user");
+        }
 
         try {
           const res = await api.get("/auth/me");

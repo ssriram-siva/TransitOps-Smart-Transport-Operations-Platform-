@@ -2,6 +2,7 @@ const express = require("express");
 const { body, validationResult, param } = require("express-validator");
 const Vehicle = require("../models/Vehicle");
 const { protect, authorize } = require("../middleware/auth");
+const { getIO } = require("../utils/socket");
 
 const router = express.Router();
 
@@ -125,6 +126,10 @@ router.post(
         registrationNumber: req.body.registrationNumber.toUpperCase(),
       });
 
+      const io = getIO();
+      io.to("dashboard").emit("dashboard:update");
+      io.to("tracking").emit("vehicle:added", { vehicleId: vehicle._id, registrationNumber: vehicle.registrationNumber });
+
       res.status(201).json({ success: true, vehicle });
     } catch (error) {
       if (error.code === 11000) {
@@ -202,6 +207,10 @@ router.put(
       if (!vehicle) {
         return res.status(404).json({ success: false, message: "Vehicle not found" });
       }
+
+      const io = getIO();
+      io.to("dashboard").emit("dashboard:update");
+      io.to("tracking").emit("vehicle:updated", { vehicleId: vehicle._id, status: vehicle.status });
 
       res.status(200).json({ success: true, vehicle });
     } catch (error) {
