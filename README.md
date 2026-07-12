@@ -1,8 +1,5 @@
 # 🚚 RouteMind
 
-<p align="center">
-  <img src="assets/banner.png" alt="RouteMind Banner" width="100%">
-</p>
 
 <p align="center">
   <strong>Smart Transport Operations Platform</strong><br>
@@ -48,11 +45,11 @@ RouteMind is a Smart Transport Operations Platform built using the **MERN Stack*
 
 ### Live Tracking
 
-![Live Tracking](assets/live-tracking.png)
+![Live Tracking](assets/livetracking.png)
 
 ### Vehicle Management
 
-![Vehicle Management](assets/vehicles.png)
+![Vehicle Management](assets/vehicle.png)
 
 ### Driver Management
 
