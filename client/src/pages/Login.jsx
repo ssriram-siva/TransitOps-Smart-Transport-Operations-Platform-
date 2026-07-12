@@ -88,7 +88,7 @@ function Login() {
               <Truck className="w-7 h-7 text-white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-white">TransitOps</h1>
+              <h1 className="text-2xl font-bold text-white">RouteMind</h1>
               <p className="text-xs text-primary-300/60 tracking-widest uppercase">
                 Fleet Control
               </p>
@@ -233,26 +233,8 @@ function Login() {
             </Link>
           </p>
 
-          {/* Demo Credentials */}
-          <div className="mt-8 p-4 bg-dark-50 rounded-xl border border-dark-100">
-            <p className="text-xs font-semibold text-dark-500 mb-2">
-              Demo Credentials
-            </p>
-            <div className="space-y-1 text-xs text-dark-400">
-              <p>
-                <span className="font-medium text-dark-600">Admin:</span>{" "}
-                admin@transitops.com / admin123
-              </p>
-              <p>
-                <span className="font-medium text-dark-600">Dispatcher:</span>{" "}
-                dispatcher@transitops.com / dispatcher123
-              </p>
-              <p>
-                <span className="font-medium text-dark-600">Viewer:</span>{" "}
-                viewer@transitops.com / viewer123
-              </p>
-            </div>
-          </div>
+         
+         
         </div>
       </div>
     </div>
