@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Outlet, Link, useLocation } from "react-router-dom";
+import { Outlet, Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Truck,
@@ -18,6 +18,7 @@ import {
   Sun,
   Moon,
 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const navItems = [
   { path: "/", label: "Dashboard", icon: LayoutDashboard },
@@ -38,8 +39,30 @@ function Layout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const currentPage = navItems.find((i) => i.path === location.pathname);
+
+  const userInitials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+    : "U";
+
+  const roleLabels = {
+    admin: "Administrator",
+    dispatcher: "Dispatcher",
+    driver: "Driver",
+    viewer: "Viewer",
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <div className="flex h-screen bg-dark-50 overflow-hidden">
@@ -237,13 +260,13 @@ function Layout() {
                 className="flex items-center gap-3 p-1.5 pr-3 rounded-xl hover:bg-dark-100 transition-all"
               >
                 <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-md shadow-primary-500/20">
-                  <span className="text-sm font-bold text-white">AD</span>
+                  <span className="text-sm font-bold text-white">{userInitials}</span>
                 </div>
                 <div className="hidden sm:block text-left">
                   <p className="text-sm font-semibold text-dark-800 leading-tight">
-                    Admin User
+                    {user?.name || "User"}
                   </p>
-                  <p className="text-[11px] text-dark-400">Administrator</p>
+                  <p className="text-[11px] text-dark-400">{roleLabels[user?.role] || "Role"}</p>
                 </div>
                 <ChevronDown
                   className={`w-4 h-4 text-dark-400 transition-transform duration-200 ${
@@ -262,10 +285,10 @@ function Layout() {
                   <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl shadow-dark-200/50 border border-dark-100 py-2 z-50 animate-scale-in">
                     <div className="px-4 py-3 border-b border-dark-100">
                       <p className="text-sm font-semibold text-dark-900">
-                        Admin User
+                        {user?.name || "User"}
                       </p>
                       <p className="text-xs text-dark-400 mt-0.5">
-                        admin@transitops.com
+                        {user?.email || "user@email.com"}
                       </p>
                     </div>
                     <div className="py-1">
@@ -273,7 +296,10 @@ function Layout() {
                         <Settings className="w-4 h-4" />
                         Settings
                       </button>
-                      <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-dark-600 hover:bg-dark-50 transition-colors">
+                      <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-danger-600 hover:bg-danger-50 transition-colors"
+                      >
                         <LogOut className="w-4 h-4" />
                         Sign out
                       </button>
